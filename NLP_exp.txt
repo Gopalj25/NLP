@@ -1,0 +1,602 @@
+EXP 1. NLP Preprocessing Techniques Implementation
+Aim: 
+Theory:
+Natural Language Processing (NLP) involves various techniques to prepare and clean raw text data for analysis. Effective preprocessing is crucial because raw text data is often messy and unstructured. Here are the key preprocessing techniques:
+1. Tokenization:	
+	This is the first step in NLP where the input text is split into smaller units called tokens. These tokens can be words, sentences, or subwords. Tokenization helps in breaking down the text for further analysis.
+ Tokenizing by word:  Words are like the atoms of natural language. They’re the smallest unit of meaning that still makes sense on its 			own. Tokenizing your text by word allows you to identify words that come up particularly often.
+ Tokenizing by sentence: When you tokenize by sentence, you can analyze how
+			those words relate to one another and see more context.
+2. Punctuation Removal:
+	Punctuation marks often do not carry meaningful information for many NLP tasks. Therefore, they are usually removed from the text to reduce noise. Common punctuation marks include commas, periods, and question marks.
+3.Stop Words Removal:
+	Stop words are common words in a language (such as "is", "and", "the") that usually do not add significant meaning. Removing stop words can help in focusing on the more informative words in the text.
+4.Stemming:
+	Stemming reduces words to their root form. This technique is based on removing affixes to obtain the base form of the word. For instance, "running" and "runner" are both reduced to "run". Stemming can sometimes lead to non-words.
+5.Lemmatization:
+	Lemmatization is a more sophisticated approach that reduces words to their base or dictionary form. Unlike stemming, it considers the context of the word. For example, "better" is reduced to "good", and "running" is reduced to "run". It often requires a dictionary to achieve this.
+These preprocessing steps enhance the quality of the data, enabling more accurate results in various NLP tasks such as sentiment analysis, topic modeling, and machine learning.
+
+Conclusion:
+In this practical, we successfully implemented key NLP preprocessing techniques, including tokenization, punctuation removal, stop words removal, stemming, and lemmatization. Each technique serves to clean and prepare the text data for subsequent analysis. The processed tokens can be used for various NLP tasks, ensuring better performance and accuracy in models. Understanding these preprocessing steps is essential for anyone working in the field of NLP, as they form the foundation for more advanced techniques and applications.
+
+
+-------code
+!pip install nltk
+
+
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+import string
+
+# Download required NLTK resources
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# Sample text
+text = """Natural Language Processing (NLP) is an exciting field of study!
+Muad'Dib learned rapidly because his first training was in how to learn.
+     He learned to speak English fluently, and he learned to write poetry."""
+
+# 1. Tokenization
+sentences = sent_tokenize(text)
+print("Sentences:", sentences)
+tokens = word_tokenize(text)
+print("Tokens:", tokens)
+
+# 2. Punctuation Removal
+tokens = [word for word in tokens if word not in string.punctuation]
+print("Tokens after punctuation removal:", tokens)
+
+# 3. Stop Words Removal
+stop_words = set(stopwords.words('english'))
+tokens = [word for word in tokens if word.lower() not in stop_words]
+print("Tokens after stop words removal:", tokens)
+
+# 4. Stemming
+ps = PorterStemmer()
+stemmed_tokens = [ps.stem(word) for word in tokens]
+print("Stemmed Tokens:", stemmed_tokens)
+
+# 5. Lemmatization
+lemmatizer = WordNetLemmatizer()
+lemmatized_tokens = [lemmatizer.lemmatize(word) for word in tokens]
+print("Lemmatized Tokens:", lemmatized_tokens)
+
+
+
+===============================================
+EXP 2 NER
+Title: Use of named entity recognition information extraction technique.
+
+Aim
+The aim of this assignment is to explore the use of Named Entity Recognition (NER) as an information extraction technique in natural language processing. It focuses on identifying and classifying key entities in text data to enhance data analysis and understanding.
+
+Objectives
+To define Named Entity Recognition and its significance in natural language processing.
+To evaluate various NER algorithms and models available for entity extraction.
+To implement a practical NER application using a suitable programming language and library.
+
+Theory
+Named Entity Recognition (NER) is a crucial technique in information extraction that identifies and classifies named entities in unstructured text into predefined categories, such as persons, organizations, locations, dates, and more. By leveraging NER, researchers and practitioners can extract meaningful insights from large datasets, enabling more efficient data processing and analysis.
+ Detecting the entities from the text
+ Classifying them into different categories
+ Person
+ Organization
+ Place/ location
+Other common tasks include classifying of the following:
+ date/time.
+ expression
+ Numeral measurement (money, percent, weight, etc)
+ E-mail address
+Applications: NER can be used in various applications:
+	Extracting relevant information from unstructured data.
+	Enhancing search engine capabilities by understanding context.
+	Enriching customer support systems with context-aware responses.
+Conclusion:
+In this practical, we implemented Named Entity Recognition (NER) using the spaCy library. NER effectively identifies and categorizes entities in text, providing valuable information for various applications in NLP. By leveraging NER, we can extract relevant data from unstructured text, enabling better insights and understanding. Mastery of NER techniques is essential for data-driven applications that rely on text analysis.
+
+--------code
+# Install spaCy if not already installed
+# !pip install spacy
+# !python -m spacy download en_core_web_sm
+
+import spacy
+# Load the SpaCy model
+nlp = spacy.load("en_core_web_sm")
+# Sample text
+text = """
+Apple Inc. is looking at buying U.K. startup for $1 billion. 
+Steve Jobs founded Apple in Cupertino, California.
+"""
+# Process the text with SpaCy
+doc = nlp(text)
+for ent in doc.ents:
+  print(f"Entity: {ent.text}, Label: {ent.label_}")
+
+
+
+========================
+EXP3 . Implement POS Tagging
+Aim:
+Theory:
+Part-of-Speech (POS) tagging is a vital process in Natural Language Processing that involves assigning a specific grammatical category (part of speech) to each word in a given text. The primary categories include:
+	Nouns (NN): Words that represent people, places, things, or ideas (e.g., "cat", "city").
+	Verbs (VB): Action words that describe what the subject is doing (e.g., "run", "is").
+	Adjectives (JJ): Descriptive words that modify nouns (e.g., "beautiful", "quick").
+	Adverbs (RB): Words that modify verbs, adjectives, or other adverbs, often ending in "-ly" (e.g., "quickly", "very").
+	Pronouns (PRP): Words that replace nouns (e.g., "he", "they").
+	Prepositions (IN): Words that indicate relationships between nouns or pronouns and other words (e.g., "in", "on").
+	Conjunctions (CC): Words that connect clauses or sentences (e.g., "and", "but").
+	Determiners (DT): Words that introduce nouns (e.g., "the", "a").
+Importance of POS Tagging:
+•Disambiguation: POS tagging helps in disambiguating words that have multiple meanings depending on their context. For example, "bark" can refer to the sound a dog makes or the outer covering of a tree, and tagging helps in identifying its use.
+•Grammatical Structure: Understanding the grammatical structure of sentences is crucial for many NLP applications, such as parsing and machine translation.
+•Enhanced Features: POS tags can provide additional features for machine learning models, improving their performance in tasks like sentiment analysis and text classification.
+Applications:
+	Syntactic Parsing: Helps in breaking down sentences into their constituent parts to analyze their grammatical structure.
+	Information Extraction: Enhances the process of extracting meaningful information from text by understanding the relationships 	between words.
+	Sentiment Analysis: Identifies sentiment-bearing words (usually adjectives and adverbs) to analyze opinions or sentiments 	expressed in the text.
+Conclusion:
+In this practical, we implemented Part-of-Speech (POS) tagging using the nltk library, demonstrating how to assign grammatical categories to words in a sentence. POS tagging is a fundamental technique in Natural Language Processing that provides insights into the grammatical structure of sentences. It plays a crucial role in various NLP applications, enhancing tasks such as information extraction, syntactic parsing, and sentiment analysis. By effectively tagging each word, we can build a robust foundation for further processing and analysis in more complex NLP tasks.
+
+---------code
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Download required NLTK resources
+nltk.download('punkt_tag')  # For tokenization
+nltk.download('averaged_perceptron_tagger_eng')  # For POS tagging
+
+# Sample text for POS tagging
+text = "The quick brown fox jumps over the lazy dog."
+
+# Step 1: Tokenization
+# Tokenizing the text into words
+tokens = word_tokenize(text)
+
+# Step 2: POS Tagging
+# Performing POS tagging on the tokenized words
+pos_tags = nltk.pos_tag(tokens)
+
+# Step 3: Displaying the POS tags
+print("Part-of-Speech Tags:")
+for word, tag in pos_tags:
+    print(f"{word}: {tag}")
+
+
+
+
+=======================================
+EXP4:Implement a Code for Aspect Mining
+aim:The aim of this project is to implement aspect mining and topic modeling techniques for extracting meaningful insights from textual data. By identifying key aspects and underlying topics, we can better understand the sentiments and themes present in the text.
+Objectives
+To utilize Natural Language Processing (NLP) techniques for extracting aspects from text data.
+To implement topic modeling using algorithms like LDA to discover latent topics in the dataset.
+To evaluate the effectiveness of the aspect mining and topic modeling techniques through qualitative analysis of results.
+Theory:
+Aspect mining is a subfield of sentiment analysis that focuses on identifying and extracting specific aspects or features from a text, along with the sentiments expressed about those aspects. This technique is particularly useful in analyzing user reviews, feedback, and other forms of subjective text, allowing businesses and researchers to understand customer opinions on different features of a product or service.
+Aspect mining is a valuable technique in sentiment analysis, providing insights into customer opinions on specific features of products or services. Understanding customer sentiment towards various aspects allows businesses to enhance their offerings and improve customer satisfaction.
+This foundational knowledge in aspect mining can be further expanded with advanced techniques, including machine learning and deep learning approaches, to achieve more accurate and nuanced analysis.
+
+Key Concepts:
+Aspect:
+	An aspect refers to a specific feature or component of a product or service that is mentioned in a text. For example, in a 	restaurant review, aspects could include "food quality," "service," and "ambiance."
+Sentiment:
+	Sentiment refers to the opinion or emotion expressed about an aspect. It can be positive, negative, or neutral. For example, a 	review may state, "The food was excellent," indicating a positive sentiment towards the "food quality" aspect.
+Applications:
+	Customer Feedback Analysis: Businesses use aspect mining to analyze customer feedback and identify strengths and weaknesses in 	their products or services.
+Market Research: Understanding consumer opinions about various aspects helps companies make informed decisions regarding product 	development and marketing strategies.
+Improving Services:
+	 By focusing on specific aspects, organizations can enhance services and address customer concerns effectively.
+Techniques:	
+	Aspect mining can be performed using various methods, including rule-based approaches, machine learning, and deep learning 	techniques, such as topic modeling (e.g., LDA) and neural networks.
+
+Conclusion:
+In this practical, we implemented a simple aspect mining technique to identify aspects from user reviews and determine the sentiment associated with each aspect. By utilizing a rule-based approach and the Sentiment Intensity Analyzer from the NLTK library, we demonstrated how aspect mining can be performed effectively.
+
+-----------code
+#!pip install textblob
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from textblob import TextBlob
+
+# Download necessary NLTK data
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Sample restaurant reviews
+reviews = [
+    "The food was amazing but the service was slow.",
+    "I love the ambience, but the food was overpriced.",
+    "Great service and delicious food!",
+    "The restaurant is beautiful, but the wait was too long."
+]
+
+# Function to extract aspects (noun phrases) and their sentiment
+def extract_aspects_with_sentiment(review):
+    blob = TextBlob(review)
+    aspects = blob.noun_phrases  # Extract noun phrases
+    sentiment = blob.sentiment.polarity  # Overall sentiment score (-1 to 1)
+
+    # Classify sentiment as positive, negative, or neutral
+    sentiment_label = (
+        "positive" if sentiment > 0 else "negative" if sentiment < 0 else "neutral"
+    )
+    
+    return aspects, sentiment_label
+
+# Print aspects and sentiments for each review
+for i, review in enumerate(reviews):
+    aspects, sentiment = extract_aspects_with_sentiment(review)
+    print(f"Review {i + 1}:")
+    for aspect in aspects:
+        print(f"  Aspect: {aspect}")
+        print(f"  Sentiment: {sentiment}")
+    print()
+
+----------------------------code
+pip install nltk gensim sklearn pandas
+
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from gensim import corpora
+from gensim.models import LdaModel
+import re
+import nltk
+nltk.download('averaged_perceptron_tagger')
+  
+# Download necessary NLTK resources
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Sample data: replace this with your dataset
+data = {
+    'reviews': [
+        "The battery life is amazing, but the camera is mediocre.",
+        "I love the design of the phone, but the performance is disappointing.",
+        "Great value for money! The screen quality is excellent.",
+        "The battery drains quickly, but the software is user-friendly."
+    ]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Preprocessing function
+def preprocess_text(text):
+    # Lowercase
+    text = text.lower()
+    # Remove punctuation
+    text = re.sub(r'[^\w\s]', '', text)
+    # Tokenize
+    tokens = word_tokenize(text)
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word not in stop_words]
+    return tokens
+
+# Preprocess reviews
+df['tokens'] = df['reviews'].apply(preprocess_text)
+
+# Aspect Mining: Extracting potential aspects (nouns)
+aspects = []
+for tokens in df['tokens']:
+    for token in tokens:
+        if nltk.pos_tag([token])[0][1] in ['NN', 'NNS']:  # Noun
+            aspects.append(token)
+
+# Get unique aspects
+unique_aspects = set(aspects)
+
+print("Extracted Aspects:")
+print(unique_aspects)
+
+# Topic Modeling with LDA
+# Create a dictionary and corpus for LDA
+dictionary = corpora.Dictionary(df['tokens'])
+corpus = [dictionary.doc2bow(tokens) for tokens in df['tokens']]
+
+# Train LDA model
+lda_model = LdaModel(corpus, num_topics=2, id2word=dictionary, passes=10)
+# Print topics
+print("\nTopics found:")
+for idx, topic in lda_model.print_topics(-1):
+    print(f"Topic {idx}: {topic}")
+
+
+
+
+==========================================================
+EXP5: Use of NLP Techniques for Text Summarization and Text Classification
+Aim:
+Objectives
+To understand different approaches to text summarization, including extractive and abstractive methods.
+To investigate various NLP libraries and tools used for text summarization tasks.
+To develop and evaluate a text summarization model using a sample dataset, assessing its effectiveness in retaining essential information.
+
+Theory:
+Natural Language Processing (NLP) encompasses a wide array of techniques that allow machines to understand, interpret, and generate human language. Among these techniques, text summarization and text classification are particularly significant and widely applied in various domains.
+1. Text Summarization: Text summarization is the process of automatically generating a concise summary of a longer text document. The two 	main approaches to summarization are:
+•Extractive Summarization:
+	This method involves identifying and extracting the most important sentences or phrases directly from the original text. 	Extractive summarization does not generate new content; instead, it selects key components from the text.
+	Techniques often used in extractive summarization include:
+	Sentence Scoring: Assigning scores to sentences based on their relevance to the overall topic.
+	Clustering: Grouping similar sentences to identify central themes.
+	Ranking: Prioritizing sentences based on their scores.
+•Abstractive Summarization:
+	This method generates new sentences that capture the main ideas of the text. Abstractive summarization requires a deeper 	understanding of the content and often uses advanced techniques like neural networks and transformer models.
+o	It aims to create a summary that may not directly include the original sentences but effectively conveys the main ideas.
+Applications of Text Summarization:
+•	News Articles: Summarizing long news articles for quick reading.
+•	Reports: Generating concise summaries of lengthy reports for decision-makers.
+•	Research Papers: Summarizing scientific papers to highlight key findings.
+
+2. Text Classification: Text classification is the process of categorizing text into predefined categories based on its content. This 	technique is widely used for various applications, including sentiment analysis, spam detection, and topic categorization. The 	classification process typically involves:
+•	Feature Extraction: Converting text data into numerical features that can be used by machine learning algorithms. Common methods 	include:
+Bag of Words (BoW): Represents text as a set of words disregarding grammar and word order but keeping multiplicity.
+TF-IDF (Term Frequency-Inverse Document Frequency): A statistic that reflects the importance of a word in a document relative to a 	collection of documents.
+Machine Learning Algorithms: Once features are extracted, various algorithms can be applied for classification, including:
+	Naive Bayes: A probabilistic classifier based on Bayes' theorem, effective for text classification.
+	Support Vector Machines (SVM): A supervised learning model that finds a hyperplane to separate classes.
+Deep Learning: Using neural networks (such as LSTMs or transformers) for classification tasks, particularly effective for large 	datasets.
+Applications of Text Classification:
+•	Sentiment Analysis: Determining the sentiment (positive, negative, neutral) expressed in text.
+•	Email Filtering: Classifying emails as spam or non-spam.
+•	Topic Categorization: Assigning topics to documents based on content.
+Conclusion:
+Text Summarization:
+	We demonstrated extractive summarization using the Gensim library. This technique allows us to condense lengthy documents into 	concise summaries, making it easier to grasp the main ideas quickly.
+Text Classification:
+	We utilized a Naive Bayes classifier from the Scikit-learn library to classify text data. By transforming text into numerical 	features and applying a supervised learning approach, we were able to categorize sentences effectively based on sentiment.
+
+---------------code
+!pip install genism
+
+from gensim.summarization import summarize
+
+# Sample text for summarization
+text = """
+Natural Language Processing (NLP) is a field of artificial intelligence that focuses on the interaction 
+between computers and humans through natural language. The ultimate goal of NLP is to enable computers to 
+understand, interpret, and generate human language in a valuable way. NLP has a wide range of applications, 
+including text analysis, machine translation, sentiment analysis, and chatbots.
+"""
+
+# Step 1: Perform extractive summarization
+summary = summarize(text, ratio=0.5)  # Summarize to 50% of the original text
+
+# Output the results
+print("Original Text:")
+print(text)
+print("\nSummarized Text:")
+print(summary)
+----------------
+#Abstractive summary
+!pip install transformers
+
+from transformers import pipeline
+# Initialize the summarization pipeline
+summarizer = pipeline("summarization")
+# Sample text
+text = """
+Natural Language Processing (NLP) is a subfield of artificial intelligence that focuses on the interaction 
+between computers and humans through natural language. The ultimate objective of NLP is to read, 
+understand, and derive meaning from human languages in a valuable way. NLP is used in various applications, 
+such as chatbots, translation services, and sentiment analysis.
+"""
+# Generate abstractive summary
+abstractive_summary = summarizer(text, max_length=50, min_length=25, do_sample=False)
+print("Abstractive Summary:")
+print(abstractive_summary[0]['summary_text'])
+-------------------
+Code for Text Classification:
+pip install scikit-learn
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import make_pipeline
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+
+# Sample dataset for classification
+data = [
+    ("I love programming in Python", "positive"),
+    ("Python is great for data science", "positive"),
+    ("I dislike bugs in the code", "negative"),
+    ("Debugging is frustrating", "negative"),
+    ("The syntax of Python is easy to learn", "positive"),
+    ("I hate when the code doesn't work", "negative"),
+]
+
+# Step 1: Prepare data
+texts, labels = zip(*data)
+
+# Step 2: Split data into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.3, random_state=42)
+
+# Step 3: Create a pipeline with CountVectorizer and Naive Bayes
+model = make_pipeline(CountVectorizer(), MultinomialNB())
+
+# Step 4: Train the model
+model.fit(X_train, y_train)
+
+# Step 5: Predict the labels for the test set
+predicted_labels = model.predict(X_test)
+
+# Step 6: Evaluate the model
+accuracy = metrics.accuracy_score(y_test, predicted_labels)
+print("\nPredicted Labels:", predicted_labels)
+print("Accuracy:", accuracy)
+
+
+===========================================================
+EXP 6: Implement Simple Machine Translation from One Language to Another
+Aim:
+Theory:
+Machine Translation (MT) is the automatic process of converting text from one language to another. With advancements in Natural Language Processing (NLP), machine translation has become increasingly accurate and sophisticated, thanks to techniques like neural networks and deep learning.
+Types of Machine Translation:
+1.	Rule-based Translation:
+o	Uses linguistic rules and dictionaries for translating text. While this method can produce high-quality translations, it requires extensive resources and expert knowledge for each language pair.
+2.	Statistical Machine Translation (SMT):
+o	Relies on statistical models and large corpora of translated texts. SMT learns how to translate from data, often producing better results than rule-based systems but still struggles with nuances and context.
+3.	Neural Machine Translation (NMT):
+o	Employs deep learning techniques to model the translation task as a sequence-to-sequence problem. NMT considers the entire context of the sentence, leading to more fluent and accurate translations. Popular frameworks for NMT include the Transformer model and recurrent neural networks (RNNs).
+Applications of Machine Translation:
+•	Translating documents, websites, and emails.
+•	Assisting with real-time translation in communication tools.
+•	Supporting cross-cultural communication in global businesses.
+Conclusion:
+In this practical, we implemented a simple machine translation system using the Hugging Face transformers library. By leveraging pre-trained models, we demonstrated how to translate text from one language to another effectively.
+Machine translation is a powerful application of NLP that facilitates communication across languages, enabling global interaction and understanding. While pre-trained models offer significant capabilities, ongoing advancements in neural networks and deep learning continue to enhance the accuracy and fluency of translations.
+
+-------------code
+!pip install transformers torch
+
+from transformers import MarianMTModel, MarianTokenizer
+
+# Step 1: Define the translation model and tokenizer
+model_name = 'Helsinki-NLP/opus-mt-en-fr'  # English to French
+tokenizer = MarianTokenizer.from_pretrained(model_name)
+model = MarianMTModel.from_pretrained(model_name)
+
+# Step 2: Define the text to be translated
+text_to_translate = "Machine translation is a fascinating field of artificial intelligence."
+
+# Step 3: Tokenize the input text
+tokenized_text = tokenizer(text_to_translate, return_tensors="pt")
+
+# Step 4: Perform the translation
+translated_tokens = model.generate(**tokenized_text)
+
+# Step 5: Decode the translated tokens
+translated_text = tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
+
+# Output the results
+print("Original Text:", text_to_translate)
+print("Translated Text:", translated_text)
+
+
+=======================================================
+Exp 7:Implement Sentiment Analysis Technique for Classifying Data into Positive, Negative, or Neutral Classes
+Aim:
+Objectives
+To define sentiment analysis and its relevance in understanding textual emotions and opinions.
+To explore various sentiment analysis algorithms and libraries used for text classification.
+To develop a sentiment analysis model and evaluate its performance on a sample dataset.
+Theory:
+Sentiment analysis is a crucial task in Natural Language Processing (NLP) that involves determining the emotional tone or sentiment expressed in a piece of text. This technique is widely used in various applications, including social media monitoring, customer feedback analysis, and brand reputation management.
+Types of Sentiment Analysis:
+1.	Binary Sentiment Analysis:
+o	Classifies text into two categories: positive or negative. This approach is often used for straightforward opinions where only a positive or negative sentiment is expressed.
+2.	Multi-class Sentiment Analysis:
+o	Involves classifying text into three or more categories, such as positive, negative, and neutral. This approach provides a more nuanced understanding of sentiments expressed in text.
+Techniques for Sentiment Analysis:
+•	Lexicon-Based Approaches: Utilize pre-defined sentiment dictionaries that assign sentiment scores to words. The overall sentiment is calculated based on the sentiment scores of words in the text.
+•	Machine Learning Approaches: Involve training models on labeled datasets using algorithms like Naive Bayes, Support Vector Machines (SVM), or decision trees.
+•	Deep Learning Approaches: Leverage neural networks, particularly recurrent neural networks (RNNs) and transformers, for capturing complex patterns and context in text data.
+Objectives
+To define sentiment analysis and its relevance in understanding textual emotions and opinions.
+To explore various sentiment analysis algorithms and libraries used for text classification.
+To develop a sentiment analysis model and evaluate its performance on a sample dataset.
+
+-------------------------code
+#pip install textblob
+#python -m textblob.download_corpora
+from textblob import TextBlob
+
+# Function to classify sentiment
+def classify_sentiment(text):
+    blob = TextBlob(text)
+    # Get the polarity score
+    polarity = blob.sentiment.polarity
+
+    # Classify based on polarity
+    if polarity > 0:
+        return "Positive"
+    elif polarity < 0:
+        return "Negative"
+    else:
+        return "Neutral"
+
+# Sample texts
+texts = [
+    "I love this product! It's amazing.",
+    "I'm really unhappy with the service.",
+    "It's an average experience.",
+    "This is the best day ever!",
+    "I'm not sure how I feel about this."
+]
+
+# Analyze sentiment for each text
+for text in texts:
+    sentiment = classify_sentiment(text)
+    print(f"Text: {text}\nSentiment: {sentiment}\n")
+
+
+
+================================================================
+EXP 8:Tokenize a Text Using the transformers Package and Translate the Text Using Simple Transformers
+Objective:Code Implementation:
+In this practical, we will:
+1.	Tokenize an English text.
+2.	Translate it from English to French.
+3.	Display both the tokenized input and the translated output.
+Theory:
+Tokenization: Tokenization is the process of converting a sequence of text into smaller components called tokens. These tokens can represent words, subwords, or characters. Tokenization is essential for preparing text data for machine learning models since most models operate on numerical data rather than raw text.
+There are different tokenization strategies:
+1.	Word Tokenization: Splitting text based on spaces and punctuation. This method often results in a loss of context since different forms of a word (e.g., "run" and "running") may not be treated uniformly.
+2.	Subword Tokenization: Breaking down words into smaller, more manageable pieces. This is particularly useful for handling rare words and maintaining vocabulary efficiency. Models like Byte-Pair Encoding (BPE) and SentencePiece are popular for this purpose.
+3.	Character Tokenization: Splitting text into individual characters. This approach captures every aspect of the text but can lead to longer sequences, which may not be optimal for many NLP tasks.
+Translation: Machine translation (MT) refers to the process of automatically translating text from one language to another. The transformers library by Hugging Face provides pre-trained models that facilitate various NLP tasks, including translation.
+Key Steps in Translation:
+1.	Input Preparation: Text must be tokenized and encoded into a format suitable for the model.
+2.	Model Processing: The model takes the tokenized input and generates token IDs corresponding to the translated output.
+3.	Output Decoding: The generated tokens are then decoded back into human-readable text.
+Applications:
+•	Machine translation is vital for breaking language barriers in global communication, aiding in fields like travel, e-commerce, and international relations.
+
+--------------------------code
+from transformers import MarianMTModel, MarianTokenizer
+
+# Step 1: Define the translation model and tokenizer
+model_name = 'Helsinki-NLP/opus-mt-en-fr'  # Model for English to French translation
+tokenizer = MarianTokenizer.from_pretrained(model_name)
+model = MarianMTModel.from_pretrained(model_name)
+
+# Step 2: Define the text to be translated
+text_to_translate = "The weather today is beautiful and sunny."
+
+# Step 3: Tokenize the input text
+tokenized_text = tokenizer(text_to_translate, return_tensors="pt")
+
+# Output tokenized input
+print("Tokenized Input IDs:", tokenized_text['input_ids'])
+print("Tokenized Attention Mask:", tokenized_text['attention_mask'])
+
+# Step 4: Perform the translation
+translated_tokens = model.generate(**tokenized_text)
+
+# Step 5: Decode the translated tokens
+translated_text = tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
+
+# Output the results
+print("\nOriginal Text:", text_to_translate)
+print("Translated Text:", translated_text)
+
+
+
+
+
+
+
+
+
+
